@@ -1,0 +1,72 @@
+version: 1
+system: maksutov-growth
+owner: Evgenii Maksutov
+site: https://maksutovdesign.ru
+
+agents:
+  orchestrator:
+    prompt: prompts/orchestrator.md
+    approval_default: A1
+    reads: [crm, reports, strategy, policies]
+    writes: [reports, crm]
+    delegates_to: [seo_auditor, content_researcher, content_writer, case_builder, lead_hunter, studio_hunter, job_hunter, outreach_writer, link_researcher, profile_distribution, analytics]
+
+  seo_auditor:
+    prompt: prompts/seo-auditor.md
+    approval_default: A1
+    outputs: [data/seo, reports/weekly]
+
+  content_researcher:
+    prompt: prompts/content-researcher.md
+    approval_default: A1
+    outputs: [data/content]
+
+  content_writer:
+    prompt: prompts/content-writer.md
+    approval_default: A1
+    outputs: [data/content]
+    publish_requires: A2
+
+  case_builder:
+    prompt: prompts/case-builder.md
+    approval_default: A1
+    outputs: [data/content]
+    publish_requires: A2
+
+  lead_hunter:
+    prompt: prompts/lead-hunter.md
+    approval_default: A1
+    outputs: [data/leads, crm]
+
+  studio_hunter:
+    prompt: prompts/studio-hunter.md
+    approval_default: A1
+    outputs: [data/studios, crm]
+
+  job_hunter:
+    prompt: prompts/job-hunter.md
+    approval_default: A1
+    outputs: [data/jobs, crm]
+
+  outreach_writer:
+    prompt: prompts/outreach-writer.md
+    approval_default: A1
+    outputs: [data/outreach, crm]
+    send_requires: A2
+
+  link_researcher:
+    prompt: prompts/link-researcher.md
+    approval_default: A1
+    outputs: [data/backlinks, crm]
+    pitch_requires: A2
+
+  profile_distribution:
+    prompt: prompts/profile-distribution.md
+    approval_default: A1
+    outputs: [data/backlinks, crm]
+    public_change_requires: A2
+
+  analytics:
+    prompt: prompts/analytics.md
+    approval_default: A1
+    outputs: [reports/daily, reports/weekly]

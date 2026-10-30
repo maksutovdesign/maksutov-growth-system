@@ -1,0 +1,53 @@
+version: 1
+system: maksutov-growth-mvp
+site: https://maksutovdesign.ru
+
+shared_output_contract:
+  required:
+    - summary
+    - evidence
+    - confidence
+    - recommended_next_action
+    - approval_level
+    - crm_updates
+    - risks
+
+agents:
+  orchestrator:
+    prompt: prompts/orchestrator.md
+    tools: [crm_read, crm_write_internal, delegate, web_search]
+    max_subagents: 4
+    default_approval: A1
+
+  lead_hunter:
+    prompt: prompts/lead-hunter.md
+    tools: [web_search, crm_read, crm_write_internal]
+    default_approval: A1
+
+  studio_hunter:
+    prompt: prompts/studio-hunter.md
+    tools: [web_search, crm_read, crm_write_internal]
+    default_approval: A1
+
+  job_hunter:
+    prompt: prompts/job-hunter.md
+    tools: [web_search, crm_read, crm_write_internal]
+    default_approval: A1
+
+  outreach_writer:
+    prompt: prompts/outreach-writer.md
+    tools: [crm_read, crm_write_internal]
+    forbidden_tools: [email_send, social_send, form_submit]
+    default_approval: A1
+    external_action_requires: A2
+
+  seo_auditor:
+    prompt: prompts/seo-auditor.md
+    tools: [web_search, site_read, crm_read, crm_write_internal]
+    forbidden_tools: [production_deploy]
+    default_approval: A1
+
+  analytics:
+    prompt: prompts/analytics.md
+    tools: [crm_read, crm_write_internal]
+    default_approval: A1

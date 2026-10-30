@@ -1,0 +1,56 @@
+# Reference design only; these cron jobs are not installed.
+# Active schedule: Codex heartbeat maksutov-growth-a0-a1; see docs/automation/daily-run.md.
+version: 1
+timezone: Europe/Berlin
+kill_switch_env: GROWTH_AUTOMATION_ENABLED
+
+jobs:
+  weekday_orchestrator:
+    cron: "15 8 * * 1-5"
+    agent: orchestrator
+    mode: A1
+    task: "Build today's prioritized growth work queue from CRM state."
+
+  lead_discovery:
+    cron: "30 8 * * 1,2,4,5"
+    agent: lead_hunter
+    mode: A1
+    max_candidates: 30
+    qualified_target: 8
+
+  studio_discovery:
+    cron: "30 9 * * 2,4"
+    agent: studio_hunter
+    mode: A1
+    max_candidates: 20
+    qualified_target: 6
+
+  job_discovery:
+    cron: "0 10 * * 1-5"
+    agent: job_hunter
+    mode: A1
+    max_candidates: 30
+    qualified_target: 10
+
+  outreach_drafts:
+    cron: "30 11 * * 1-5"
+    agent: outreach_writer
+    mode: A1
+    max_new_drafts: 10
+    creates_approval: A2
+
+  seo_audit:
+    cron: "0 9 * * 1"
+    agent: seo_auditor
+    mode: A1
+
+  daily_analytics:
+    cron: "30 17 * * 1-5"
+    agent: analytics
+    mode: A1
+
+  weekly_analytics:
+    cron: "0 16 * * 5"
+    agent: analytics
+    mode: A1
+    task: "Produce weekly funnel, wins/losses, experiments, and next-week recommendations."

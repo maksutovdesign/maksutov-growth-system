@@ -1,0 +1,27 @@
+runtime:
+  persistent_sessions: true
+  multi_agent: true
+  max_concurrent_subagents: 4
+
+permissions:
+  web_search: A0
+  analytics_read: A0
+  crm_read: A0
+  crm_write: A1
+  filesystem_workspace_write: A1
+  git_branch_commit: A1
+  email_draft: A1
+  email_send: A2
+  social_message_send: A2
+  job_application_submit: A2
+  public_profile_update: A2
+  website_publish: A2
+  production_merge: A2
+  billing_purchase: A3
+  legal_acceptance: A3
+  dns_auth_secrets: A3
+
+default_behavior:
+  unknown_side_effect: deny
+  approval_timeout: deny
+  source_ambiguity: draft_only

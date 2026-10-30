@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "registry": "config/agents.yaml",
+  "mvp_registry": "config/mvp-agents.yaml",
+  "schedule": "One Codex heartbeat daily at 09:00 Europe/Moscow",
+  "approval_scope": ["A0", "A1"],
+  "external_actions_enabled": false,
+  "execution_policy": "docs/automation/daily-execution-policy.md",
+  "owner_review_levels": ["A2", "A3"],
+  "daily_plan_required": true,
+  "continue_beyond_first_role_result": true,
+  "coverage_required_every_run": true,
+  "max_concurrent_researchers": 3,
+  "crm_writer": "orchestrator",
+  "coverage_statuses": ["completed", "no_eligible_work", "blocked", "failed"],
+  "coverage_report": "reports/daily/agent-coverage-<date>-<run_id>.json",
+  "agents": [
+    {"id":"orchestrator","prompt":"prompts/orchestrator.md","daily_work":"Preflight, CRM queue, owner facts, suppression, priorities, dispatch, sequential CRM writes and coverage reconciliation"},
+    {"id":"analytics","prompt":"prompts/analytics.md","daily_work":"Read CRM health and available traffic data at startup; final daily digest and coverage checks at completion"},
+    {"id":"seo_auditor","prompt":"prompts/seo-auditor.md","daily_work":"Advance one eligible existing SEO task or evidence-based local patch; Monday deeper audit; avoid unchanged recrawls"},
+    {"id":"content_researcher","prompt":"prompts/content-researcher.md","daily_work":"Research or enrich the active buyer-intent brief; check demand, sources and cannibalization; up to three new topics per week"},
+    {"id":"content_writer","prompt":"prompts/content-writer.md","depends_on":["content_researcher"],"daily_work":"Continue the one active article from a reviewed brief, then fact-check and prepare local publication materials"},
+    {"id":"case_builder","prompt":"prompts/case-builder.md","daily_work":"Advance a real existing case draft, headings, proof or internal-link task from verified portfolio facts"},
+    {"id":"lead_hunter","prompt":"prompts/lead-hunter.md","daily_work":"Public direct-client research, freshness, evidence and scoring; up to five new candidates"},
+    {"id":"studio_hunter","prompt":"prompts/studio-hunter.md","daily_work":"Public studio/agency partnership research and qualification; up to five new candidates"},
+    {"id":"job_hunter","prompt":"prompts/job-hunter.md","daily_work":"Public remote jobs/contracts research and qualification; up to five new candidates"},
+    {"id":"outreach_writer","prompt":"prompts/outreach-writer.md","depends_on":["lead_hunter","studio_hunter","job_hunter"],"daily_work":"Check qualified eligible CRM queue and write up to three personalized drafts from saved evidence only"},
+    {"id":"link_researcher","prompt":"prompts/link-researcher.md","daily_work":"Research or enrich a relevant editorial/link opportunity within shared weekly distribution cap; local proposals only"},
+    {"id":"profile_distribution","prompt":"prompts/profile-distribution.md","daily_work":"Check existing-profile inventory and advance one local profile/distribution proposal within shared cap; no public edits or account creation"}
+  ],
+  "rules": [
+    "Every role must have a dated coverage entry each run; do not silently drop a role because jobs consumed the run.",
+    "Coverage entries contain agent, status, reason, evidence/artifacts and actual agent_run_id when executed.",
+    "A coverage entry is not proof of execution. Never create fictitious succeeded agent_runs for unexecuted work.",
+    "no_eligible_work requires an actual queue/eligibility check and a concrete reason, such as cooldown, no verified brief or exhausted weekly cap.",
+    "A missing permission/source/dependency is blocked; a tool/runtime error is failed, never successful coverage.",
+    "If preflight blocks the run, record dependent roles as blocked without executing or claiming them completed.",
+    "Delegate independent public research in waves within concurrency limits; keep dependent work and CRM writes sequential.",
+    "Do not force new records or output to fill quotas. Continue existing articles, cases and tasks rather than duplicate them.",
+    "Append important lifecycle events and log real executions in agent_runs; external_actions always zero."
+  ]
+}
