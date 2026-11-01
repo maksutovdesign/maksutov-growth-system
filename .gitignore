@@ -1,0 +1,10 @@
+node_modules/
+.local/
+.tools/
+.env
+.env.*
+!.env.example
+reports/
+data/
+drafts/
+.DS_Store
